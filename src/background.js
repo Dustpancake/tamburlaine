@@ -23,7 +23,13 @@ function createWindow() {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
-    }
+    },
+    show: false,
+    backgroundColor: "#0a0e14"
+  })
+
+  win.once('ready-to-show', () => {
+     win.show()
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
