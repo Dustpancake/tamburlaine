@@ -1,21 +1,20 @@
 <template>
   <v-container>
     <h1><b>tamburlaine</b> notes</h1>
-    <h6>{{this.current}}</h6>
+    <h6>{{getCWD()}}</h6>
     <linkedlist 
       :dirs="dirs" 
-      :mds="markdowns" 
+      :mds="markdowns"
       @newdir="changedir"
-      @rendermd="rendermd"
       >
       </linkedlist>
   </v-container>
 </template>
 
 <script>
-import linkedlist from '@/components/linkedlist';
+import linkedlist from '@/components/linkedlist'
+import { fetch_note_dir } from '@/services/fileio'
 
-const fs = require('fs')
 const path = require('path')
 
 export default {
@@ -23,75 +22,55 @@ export default {
     linkedlist
   },
 
-  props: {
-    path: {
-      default: "/Users/cosroe/Developer/Notes/Dust-Notes"
-    }
-  },
-
   data() {
     return {
       dirs: [],
       markdowns: [], 
-      current: ""
     }
   },
 
   methods: {
+
+    updateCWD(cwd) {
+      this.$store.commit("setCWD", cwd);
+    },
+
+    getCWD() {
+      return this.$store.state.cwd;
+    },
+
     changedir(dir) {
+      // modify current path
       if (dir == '..') {
-        var temp = this.current.split('/');
+        var temp = this.getCWD().split('/');
         temp.pop();
-        this.current = temp.join('/');
-          
+        this.updateCWD(temp.join('/'));
       }
       else {
-        this.current = path.join(this.current, dir);
+        this.updateCWD(path.join(this.getCWD(), dir));
       }
-      console.log(this.current);
+      // update view
       this.updateView();
     },
 
-
-    rendermd(md) {
-      var mdpath = path.join(this.current, md);
-      this.$router.push(
-        {'name': 'Note', params: { path: mdpath }}
-      );
-    },
-
-
     updateView() {
-      fs.readdir(this.current, (err, files) => {
-      files = files.filter(file => !(file[0] == '.'||file[0]=='_'));
+      var cwd = this.getCWD();
 
-      var dirs = [];
-      var markdowns = files.filter(file => {
-        /* extract markdown files and store rest in dir array */
+      fetch_note_dir(cwd).then((result) => {
 
-        // get file extension 
-        // https://stackoverflow.com/questions/190852/how-can-i-get-file-extensions-with-javascript
-        var ext = (/[.]/.exec(file)) ? /[^.]+$/.exec(file) : undefined;
-        if (ext == 'md') {
-          return true;
-        } else {
-          if (fs.lstatSync(path.join(this.current,file)).isDirectory()) {
-            dirs.push(file)
-          }
-          return false;
+        this.dirs = result.dirs;
+        this.markdowns = result.mds;
+
+        if (this.root != cwd) {
+          this.dirs.push('..');
         }
+
       });
-      if (this.path != this.current) {
-        dirs.push("..");
-      }
-      this.dirs = dirs;
-      this.markdowns = markdowns;
-    });
     }
   },
 
   mounted() {
-    this.current = this.path;
+    this.root = this.$store.state.root;
     this.updateView();
   }
 

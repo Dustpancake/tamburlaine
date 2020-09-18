@@ -1,5 +1,5 @@
 <template>
-    <vue-markdown :source="content" @rendered="update"/>
+    <vue-markdown tile :source="content" @rendered="update"/>
 </template>
 
 <script>

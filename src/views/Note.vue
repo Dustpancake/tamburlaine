@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <navbar :content="toc"/>
-    <v-main xs12 md12 lg12>
+    <v-main float>
         <mdrender :content="content"></mdrender>
     </v-main>
   </v-container>
@@ -11,7 +11,7 @@
 import mdrender from '@/components/mdrender'
 import navbar from '@/components/navbar'
 
-const fs = require('fs')
+import { get_markdown } from '@/services/fileio'
 
 export default {
   components: {
@@ -34,20 +34,10 @@ export default {
   },
   
   mounted() {
-    console.log(this.path);
-    fs.readFile(this.path, 'utf-8', (err, data) => {
-      var head, toc;
-       
-      try { 
-        head = data.split("<!--BEGIN TOC-->");
-        data = head[1].split("<!--END TOC-->");
-        toc = data[0];
-        data = head[0] + data[1];
-      } catch {
-        toc = ""
-      }
-      this.toc = toc;
-      this.content = data;
+    var cwd = this.$store.state.cwd;
+    get_markdown(cwd, this.path).then((result) => {
+      this.toc = result.toc;
+      this.content = result.content;
     });
   }
 

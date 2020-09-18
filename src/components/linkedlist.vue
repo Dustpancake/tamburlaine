@@ -2,7 +2,7 @@
   <v-container>
     <v-layout row wrap>
 
-      <v-flex md4>
+      <v-flex>
         <ul v-if="dirs.length">
           <p v-for="c in dirs" :key="c">
             <a class="directories" @click="change_dir(c)">{{c}}/</a>
@@ -10,7 +10,7 @@
         </ul>
       </v-flex>
 
-      <v-flex md4>
+      <v-flex>
         <ul v-if="mds.length">
           <p v-for="c in mds" :key="c">
             <a class="markdown" @click="markdown(c)">{{c}}</a>
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-
+  
 export default {
   props: {
     dirs: {
@@ -35,13 +35,15 @@ export default {
   },
 
   methods: {
-    change_dir(c) {
-      this.$emit('newdir', c);
+    change_dir(dir) {
+      this.$emit('newdir', dir);
     },
 
-    markdown(c) {
-      this.$emit('rendermd', c)
-    }
+    markdown(md) {
+      this.$router.push(
+        {'name': 'Note', params: { path: md }}
+      );
+    },
 
   }
 }
