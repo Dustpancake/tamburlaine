@@ -5,6 +5,10 @@
 </template>
 
 <script>
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './assets/github-md.css';
+import './assets/prism-mui.css';
 
 export default {
   name: 'App',
@@ -18,8 +22,3 @@ export default {
 };
 </script>
 
-
-<style>
-@import './assets/github-md.css';
-@import './assets/prism-mui.css';
-</style>

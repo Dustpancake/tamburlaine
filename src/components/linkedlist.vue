@@ -1,25 +1,25 @@
 <template>
-  <v-container>
-    <v-layout row wrap>
+  <b-container fluid>
+    <b-row>
 
-      <v-flex>
+      <b-col>
         <ul v-if="dirs.length">
           <p v-for="c in dirs" :key="c">
             <a class="directories" @click="change_dir(c)">{{c}}/</a>
           </p>
         </ul>
-      </v-flex>
+      </b-col>
 
-      <v-flex>
+      <b-col>
         <ul v-if="mds.length">
           <p v-for="c in mds" :key="c">
             <a class="markdown" @click="markdown(c)">{{c}}</a>
           </p>
         </ul>
-      </v-flex>
+      </b-col>
 
-    </v-layout>
-  </v-container>
+    </b-row>
+  </b-container>
 </template>
 
 <script>

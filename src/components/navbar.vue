@@ -1,28 +1,28 @@
 <template>
-  <v-navigation-drawer app text permanent :width="navwidth" class="navbar">
-    <v-container>
+  <b-container fluid>
+    <b-row justify="center" align="center">
 
-      <v-flex>
-        <v-row justify="center" align="center" class="ma-0 pa-2">
+      <b-col style="padding-top: 10px;">
+        <b-btn dark @click="viewHome" outlined>
+          Home
+        </b-btn>
+      </b-col>
 
-          <v-col>
-            <v-btn dark @click="viewHome" outlined>
-              Home
-            </v-btn>
-          </v-col>
+      <b-col style="padding-top: 10px;">
+        <b-btn dark @click="toggleTOC" v-if="showtools" outlined>
+          {{hidden ? "Show" : "Hide"}}
+        </b-btn>
+      </b-col>
 
-          <v-col>
-            <v-btn dark @click="toggleTOC" v-if="showtools" outlined>
-              {{hidden ? "Show" : "Hide"}}
-            </v-btn>
-          </v-col>
+    </b-row>
 
-        </v-row>
-      </v-flex>
+    <b-row>
+      <div class="pre-scrollable" style="max-height: 90vh">
+        <mdrender :hidden=hidden :content="content"/>
+      </div>
+    </b-row>
 
-      <mdrender :hidden=hidden :content="content"/>
-    </v-container>
-  </v-navigation-drawer>
+  </b-container>
 </template>
 
 <script>
@@ -32,12 +32,6 @@ export default {
     props: {
       content: {
         default: ""
-      },
-      big_size: {
-        default: 312,
-      },
-      small_size: {
-        default: 110
       }
     },
     components: {
@@ -49,21 +43,14 @@ export default {
       },
 
       toggleTOC() {
-        if (this.hidden) {
-          this.hidden = false;
-          this.navwidth = this.big_size;
-        } else {
-          this.hidden = true;
-          this.navwidth = this.small_size;
-        }
+        this.hidden = !this.hidden;
+        this.$emit("resize", this.hidden);
       },
 
       format() {
         if (this.content == "") {
-          this.navwidth = this.small_size;
           this.showtools = false;
         } else {
-          this.navwidth = this.big_size;
           this.showtools = true;
         }
       }
@@ -80,7 +67,6 @@ export default {
 
     data() {
       return {
-        navwidth: this.big_size,
         hidden: false,
         showtools: true
       }

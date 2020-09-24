@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Note from '../views/Note.vue'
 import NoteHome from '../views/NoteHome.vue'
 
+
 Vue.use(VueRouter)
 
 const routes = [

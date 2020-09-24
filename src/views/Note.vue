@@ -1,10 +1,19 @@
 <template>
-  <v-container>
-    <navbar :content="toc"/>
-    <v-main float>
+  <b-container fluid>
+    <b-row no-gutters>
+
+      <b-col :cols=navcols style="padding-right: 10px">
+        <div class="sticky-top sticky-offset">
+          <navbar @resize="resizeview" :content="toc"/>
+        </div>
+      </b-col>
+
+      <b-col :cols=(12-navcols)>
         <mdrender :content="content"></mdrender>
-    </v-main>
-  </v-container>
+      </b-col>
+
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -26,10 +35,22 @@ export default {
 
   },
 
+  methods: {
+    resizeview(hide) {
+      if (hide) {
+        this.navcols = 1;
+      } else {
+        this.navcols = 2;
+      }
+    }
+
+  },
+
   data() {
     return {
       content: "*Loading...*",
-      toc: ""
+      toc: "",
+      navcols: 3
     }
   },
   
@@ -43,3 +64,10 @@ export default {
 
 }
 </script>
+
+
+<style>
+.sticky-offset {
+  top: 1px;
+}
+</style>

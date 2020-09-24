@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <b-container fluid margin="100px">
     <h1><b>tamburlaine</b> notes</h1>
     <h6>{{getCWD()}}</h6>
     <linkedlist 
@@ -8,7 +8,7 @@
       @newdir="changedir"
       >
       </linkedlist>
-  </v-container>
+  </b-container>
 </template>
 
 <script>
