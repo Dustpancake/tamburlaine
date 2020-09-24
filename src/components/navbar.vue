@@ -1,93 +1,53 @@
 <template>
-  <b-container fluid>
-    <b-row justify="center" align="center">
-
-      <b-col style="padding-top: 10px;">
-        <b-btn dark @click="viewHome" outlined>
-          Home
-        </b-btn>
-      </b-col>
-
-      <b-col style="padding-top: 10px;">
-        <b-btn dark @click="toggleTOC" v-if="showtools" outlined>
-          {{hidden ? "Show" : "Hide"}}
-        </b-btn>
-      </b-col>
-
-    </b-row>
-
-    <b-row>
-      <div class="pre-scrollable" style="max-height: 90vh">
-        <mdrender :hidden=hidden :content="content"/>
-      </div>
-    </b-row>
-
-  </b-container>
+  <b-navbar type="dark" variant="dark" class="topbar">
+    <b-navbar-nav class="ml">
+      <i>tamburlaine: {{ppcwd}}</i>
+    </b-navbar-nav>
+    <b-navbar-nav class="ml-auto">
+      <b-form-input class="mr-2 navitem" placeholder="Find..."></b-form-input>
+      <b-button class="navitem" variant="outline-success">find</b-button>
+    </b-navbar-nav>
+  </b-navbar>
 </template>
 
 <script>
-import mdrender from '@/components/mdrender'
-
 export default {
-    props: {
-      content: {
-        default: ""
-      }
-    },
-    components: {
-        mdrender
-    },
-    methods: {
-      viewHome() {
-        this.$router.push('/')
-      },
-
-      toggleTOC() {
-        this.hidden = !this.hidden;
-        this.$emit("resize", this.hidden);
-      },
-
-      format() {
-        if (this.content == "") {
-          this.showtools = false;
-        } else {
-          this.showtools = true;
-        }
-      }
-    },
-
-    watch: {
-      content: {
-        immediate:true,
-        handler() {
-          this.format();
-        }
-      }
-    },
-
-    data() {
-      return {
-        hidden: false,
-        showtools: true
+    computed: {
+      ppcwd() {
+        return this.$store.state.cwd
       }
     }
 }
-
 </script>
 
-
 <style>
-@import '../assets/github-md.css';
-@import '../assets/prism-mui.css';
-
-.navbar {
-  background: rgb(19,26,29) !important;
-  background: linear-gradient(90deg, rgba(14,21,24,1) 0%, rgba(10,14,20,1) 100%) !important; 
-  outline: transparent;
+.topbar {
+  position: fixed;
+  width: 100%;
+  height: 25px !important;
+  top: 0px;
+  z-index: 1000;
+  padding-left: 70px;
+  -webkit-app-region: drag;
+  min-height: 25px !important;
 }
 
-a {
-  text-decoration: none;
+.navitem {
+  -webkit-app-region: no-drag !important;
+  max-height: 2vh;
+  min-height: 20px !important;
+  padding: 0px;
+  font-size: 13px;
+}
+
+input.navitem{
+  width: 20vw !important;
+  min-width: 200px !important;
+}
+
+button.navitem{
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 </style>

@@ -2,15 +2,15 @@
   <b-container fluid>
     <b-row no-gutters>
 
-      <b-col :cols=navcols style="padding-right: 10px">
-        <div class="sticky-top sticky-offset">
-          <navbar @resize="resizeview" :content="toc"/>
+        <div class="sidebar" :style="{width: navwidth.toString() + 'px'}">
+          <sidebar
+          @resize="resizeview" :content="toc"/>
         </div>
-      </b-col>
 
-      <b-col :cols=(12-navcols)>
-        <mdrender :content="content"></mdrender>
-      </b-col>
+        <mdrender class="viewer"
+          :content="content"
+          :style="{'margin-left': navwidth.toString() + 'px'}"
+          ></mdrender>
 
     </b-row>
   </b-container>
@@ -18,14 +18,14 @@
 
 <script>
 import mdrender from '@/components/mdrender'
-import navbar from '@/components/navbar'
+import sidebar from '@/components/sidebar'
 
 import { get_markdown } from '@/services/fileio'
 
 export default {
   components: {
     mdrender,
-    navbar
+    sidebar
   },
 
   props: {
@@ -38,9 +38,9 @@ export default {
   methods: {
     resizeview(hide) {
       if (hide) {
-        this.navcols = 1;
+        this.navwidth = 100;
       } else {
-        this.navcols = 2;
+        this.navwidth = 300;
       }
     }
 
@@ -50,10 +50,10 @@ export default {
     return {
       content: "*Loading...*",
       toc: "",
-      navcols: 3
+      navwidth: 300
     }
   },
-  
+
   mounted() {
     var cwd = this.$store.state.cwd;
     get_markdown(cwd, this.path).then((result) => {
@@ -67,7 +67,12 @@ export default {
 
 
 <style>
-.sticky-offset {
-  top: 1px;
+.sidebar {
+  top: 23px;
+  position:fixed;
+}
+
+.viewer {
+  overflow-x: hidden;
 }
 </style>
